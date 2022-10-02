@@ -16,7 +16,7 @@ export const useBirthdayInfo = defineStore('birthdayInfo', {
     },
     actions: {
 
-        setBirthdayInfo(events: Events) {
+        setEvents(events: Events) {
             this.events.push(events)
         },
     },
