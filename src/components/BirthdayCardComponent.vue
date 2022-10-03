@@ -4,13 +4,15 @@
       <div class="flex justify-center">
         <div class="flex w-full  justify-center items-end mb-5">
           <div class="relative mr-4 md:w-full lg:w-full xl:w-1/2 w-2/4">
+            <div class="bg-indigo-400 border-b shadow-2xl" @click="Test" >Test</div>
             <label for="hero-field" class="leading-7 text-sm text-gray-600">First Name</label>
             <input type="text" id="hero-field" name="hero-field"
                    class="w-full bg-gray-100 rounded border bg-opacity-50 border-gray-300 focus:ring-2 focus:ring-indigo-200 focus:bg-transparent focus:border-indigo-500 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
             <label for="hero-field" class="leading-7 text-sm text-gray-600">Date of Birth</label>
-            <Datepicker v-model="date"></Datepicker>
+            <Datepicker :enableTimePicker = "false" v-model="date"></Datepicker>
           </div>
           <button
+              @click="SetBirthdayDate"
               class="inline-flex text-white bg-amber-600 border-0 py-2 px-6 focus:outline-none hover:bg-amber-500 rounded text-lg">
             Wish Me
           </button>
@@ -84,9 +86,19 @@ import '@vuepic/vue-datepicker/dist/main.css'
 import EventCards from "./EventCards.vue"
 import BirthCards from "./BirthCards.vue";
 import DeathsCard from "./DeathsCard.vue";
+import { mapActions,mapState  } from 'pinia'
+import {useBirthdayInfoStore} from "@/stores/birthday-info.store"
+import {useEventsInfoStore} from "@/stores/events-info.store";
+
 export default {
   name: "BirthdayCardComponent",
   components: {DeathsCard, BirthCards, EventCards, Datepicker },
+  setup() {
+    const birthdayInfoStore = useBirthdayInfoStore()
+    const eventsUserInfoStore = useEventsInfoStore()
+
+    return { birthdayInfoStore,eventsUserInfoStore }
+  },
   data() {
     return {
       date: null,
@@ -104,6 +116,20 @@ export default {
       }
     },
 
+    SetBirthdayDate(){
+      this.birthdayInfoStore.setBirthdayInfo({
+        date : this.date.getDate(),
+        month : this.date.toLocaleString('default', { month: 'long' })
+      })
+
+      this.eventsUserInfoStore.setEvents({date: this.date.getDate(),month:this.date.toLocaleString('default', { month: 'long' })})
+    },
+
+    // Test(){
+    //
+    //   this.eventsUserInfoStore.setEvents()
+    // },
+
     SwitchTabs(ev){
 
       this.currentTab = ev.target.getAttribute('id')
@@ -111,7 +137,14 @@ export default {
     }
   },
 
+  computed: {
 
+
+    ...mapState(useBirthdayInfoStore, {
+      // you can also write a function that gets access to the store
+      birthdayInfo: (store) => store.getBirthdayInfo,
+    }),
+  },
   created() {
     this.countDownTimer()
   }
