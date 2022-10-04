@@ -12,7 +12,6 @@ export const useBirthdayInfoStore = defineStore('birthdayInfoStore', {
         getBirthdayInfo(state) {
             return state.birthdayInfo
         },
-
     },
     actions: {
 
@@ -21,8 +20,6 @@ export const useBirthdayInfoStore = defineStore('birthdayInfoStore', {
                 .then((response) => response.json())
                 .then((data) => {
                     this.birthdayInfo = data.data
-
-
                 });
         },
     },

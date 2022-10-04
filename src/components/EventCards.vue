@@ -2,14 +2,20 @@
   <div>
     <ul class="cards">
       <li v-for="(val,i) in GetEvents" class="card">
-                    <span
-                        class="bg-blue-400 text-white px-3 py-1 tracking-widest text-xs absolute left-0 top-0 rounded-bl">EVENTS</span>
-        <!--        <span-->
-        <!--            class="bg-blue-400 text-white px-3 py-1 tracking-widest text-xs absolute left-0 top-0 rounded-bl" id="next-card">NEXT CARD</span>-->
-        <h1>{{ i }}</h1>
+        <span class="bg-blue-400 text-white px-3 py-1 tracking-widest text-xs absolute left-0 top-0 rounded-bl">EVENTS</span>
+        <div> <span class="text-blue-600">{{val.event_year}}</span>   -  {{val.event_title}}</div>
 
-        <p style="max-height: 200px; overflow: auto; scrollbar-width:thin;">{{ val.event_description }}
-        </p>
+
+            <span class="inline-block h-1 w-10 rounded bg-indigo-500 ml-8 mt-3 mb-3"></span>
+
+
+            <p class="font-extralight" style="max-height: 110px; overflow: auto; scrollbar-width:thin;">
+              {{ val.event_description }}
+            </p>
+
+
+
+
       </li>
 
     </ul>
@@ -52,12 +58,9 @@ export default {
           $current = $cards.filter('.card--current'),
           $next;
 
-      console.log($this)
-      console.log($cards)
-      console.log($current)
+
 
       $cards.on('click', function () {
-        console.log(this)
         if (!$current.is(this)) {
           $cards.removeClass('card--current card--out card--next');
           $current.addClass('card--out');
