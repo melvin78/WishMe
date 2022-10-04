@@ -4,5 +4,6 @@ export interface BreathingDaysInterface{
     hours: number;
     minutes: number;
     seconds: number;
+    name: string;
 }
 

@@ -1,14 +1,20 @@
 <template>
   <section class="text-gray-600 body-font">
     <div class="container px-5  mx-auto flex flex-wrap flex-col">
+      <div class="flex flex-col text-center w-full mb-10">
+        <h1 class="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">Welcome :)</h1>
+        <p class="lg:w-2/3 mx-auto leading-relaxed text-base">Just need your first name and date of birth nothing much then click on
+        wish me. This project is completely open <a href="https://github.com/melvin78/WishMe" class="text-blue-600 hover:text-blue-700">source</a>  no information you write will be saved.</p>
+      </div>
       <div class="flex justify-center">
         <div class="flex w-full  justify-center items-end mb-5">
           <div class="relative mr-4 md:w-full lg:w-full xl:w-1/2 w-2/4">
             <label for="hero-field" class="leading-7 text-sm text-gray-600">First Name</label>
             <input type="text" id="hero-field" name="hero-field"
+                   v-model="BirthdayName"
                    class="w-full bg-gray-100 rounded border bg-opacity-50 border-gray-300 focus:ring-2 focus:ring-indigo-200 focus:bg-transparent focus:border-indigo-500 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
             <label for="hero-field" class="leading-7 text-sm text-gray-600">Date of Birth</label>
-            <Datepicker :enableTimePicker = "false" v-model="date"></Datepicker>
+            <Datepicker :enableTimePicker="false" v-model="date"></Datepicker>
           </div>
           <button
               @click="SetBirthdayDate"
@@ -18,25 +24,47 @@
         </div>
       </div>
 
-      <div class="flex flex-col text-center w-full">
-<!--        <h1 class="text-xl font-medium title-font mb-4 text-gray-900 text-3xl">Happy Birthday User</h1>-->
-        <p class="lg:w-2/3 mx-auto leading-relaxed font-light text-2xl">CONGRATUALTIONS!!..<span class="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">
-          Melvin
+      <div v-if="date!=null && BirthdayName !== '' " class="flex flex-col text-center w-full">
+        <p class="lg:w-2/3 mx-auto leading-relaxed font-light text-2xl">CONGRATUALTIONS <span
+            class="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">
+          {{ Number(getBreathingDays.trips).toLocaleString() }}
         </span><span>
-        </span> on making <span class="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">23 </span> trips around the sun. You have been breathing for the last
-          <span class="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">8,395 </span> days,
-          <span class="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">201,480</span> hours,
-          <span class="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">12,088,800</span> minutes
+        </span> on making <span
+            class="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">{{
+            Number(getBreathingDays.trips).toLocaleString()
+          }}</span>
+          trips around the sun. You have been breathing for the last
+          <span
+              class="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">{{
+              Number(getBreathingDays.days).toLocaleString()
+            }} </span>
+          days,
+          <span
+              class="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">{{
+              Number(getBreathingDays.hours).toLocaleString()
+            }}</span>
+          hours,
+          <span
+              class="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">{{
+              Number(getBreathingDays.minutes).toLocaleString()
+            }}</span>
+          minutes
           and
-          <span class="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">725,328,000</span> seconds
-          and counting <span class="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">{{ countDown }}</span>.
+          <span class="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">{{
+              Number(getBreathingDays.seconds).toLocaleString()
+            }}</span>
+          seconds
+          and counting <span
+              class="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">{{
+              countDown
+            }}</span>.
         </p>
         <br/>
         <span class="mt-2">
           Check below to see events,deaths and births of prominent people that occured on the day you were born.
         </span>
       </div>
-      <div @click="SwitchTabs($event)" class="flex mx-auto flex-wrap mb-5">
+      <div v-if="date!=null && BirthdayName !== '' " @click="SwitchTabs($event)" class="flex mx-auto flex-wrap mb-5">
         <a id="Events-Tab"
            :class="[currentTab === 'Events-Tab'? 'sm:px-6 py-3 w-1/2 sm:w-auto justify-center sm:justify-start border-b-2 title-font font-medium' +
             'inline-flex items-center leading-none border-indigo-500 text-indigo-500 tracking-wider rounded-t cursor-pointer'
@@ -82,23 +110,32 @@ import EventCards from "./EventCards.vue"
 import BirthCards from "./BirthCards.vue";
 import DeathsCard from "./DeathsCard.vue";
 import {useBirthdayInfoStore} from "@/stores/birthday-info.store"
+import {useBreathingDaysStore} from "@/stores/breathing-days.store";
 
 export default {
   name: "BirthdayCardComponent",
-  components: {DeathsCard, BirthCards, EventCards, Datepicker },
+  components: {DeathsCard, BirthCards, EventCards, Datepicker},
   setup() {
     const birthdayInfoStore = useBirthdayInfoStore()
-    return { birthdayInfoStore }
+    const breathingDaysStore = useBreathingDaysStore()
+
+    return {birthdayInfoStore, breathingDaysStore}
   },
   data() {
     return {
       date: null,
-      countDown: 10,
-      currentTab:'Events-Tab'
+      countDown: 0,
+      currentTab: 'Events-Tab',
+      trips: 0,
+      days: 0,
+      hours: 0,
+      minutes: 0,
+      seconds: 0,
+      BirthdayName: "",
     };
   },
-  methods:{
-    countDownTimer () {
+  methods: {
+    countDownTimer() {
       if (this.countDown > 0) {
         setTimeout(() => {
           this.countDown += 1
@@ -107,9 +144,32 @@ export default {
       }
     },
 
-    async SetBirthdayDate(){
 
-      await this.birthdayInfoStore.setBirthdayInfo({date: this.date.getDate(),month:this.date.toLocaleString('default', { month: 'long' })}).then(()=>{
+    async SetBirthdayDate() {
+
+      this.trips = Number(new Date().toLocaleDateString('default', {year: 'numeric'})) - Number(this.date.toLocaleString('default', {year: 'numeric',}))
+      this.days = this.trips * 365
+      this.hours = this.days * 24
+      this.minutes = this.hours * 60
+      this.seconds = this.minutes * 60
+      this.countDown = this.seconds
+      this.countDownTimer()
+
+      this.breathingDaysStore.setBreathingDays({
+        name: this.BirthdayName,
+        days: this.days,
+        hours: this.hours,
+        minutes: this.minutes,
+        seconds: this.seconds,
+        trips: this.trips
+      })
+
+      await this.birthdayInfoStore.setBirthdayInfo(
+          {
+            date: this.date.getDate(),
+            month: this.date.toLocaleString('default', {month: 'long'})
+          }
+      ).then(() => {
 
         $('.cards').each(function () {
 
@@ -144,17 +204,21 @@ export default {
     },
 
 
-
-    SwitchTabs(ev){
-
+    SwitchTabs(ev) {
       this.currentTab = ev.target.getAttribute('id')
+    }
+  },
 
+  computed: {
+    getBreathingDays: function () {
+
+      return this.breathingDaysStore.getBreathingDays
     }
   },
 
 
   created() {
-    this.countDownTimer()
+    // this.countDownTimer()
   }
 }
 </script>
