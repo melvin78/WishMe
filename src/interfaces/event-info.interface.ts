@@ -1,4 +1,4 @@
-export interface Events{
+export interface EventsInterface{
     url: number;
     event_year: number;
     event_title: string;

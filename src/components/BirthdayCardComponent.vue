@@ -61,20 +61,16 @@
       </div>
       <div class="xl:w-1/4 lg:w-1/3 md:w-1/2 w-2/3 block mx-auto mb-10 object-cover object-center rounded">
 
-        <Transition name="bounce">
+        <Transition name="slide-fade">
           <EventCards v-if="currentTab==='Events-Tab'"/>
         </Transition>
-        <Transition name="bounce">
+        <Transition name="slide-fade">
           <BirthCards v-if="currentTab==='Births-Tab'"/>
         </Transition>
-        <Transition name="bounce">
+        <Transition name="slide-fade">
           <DeathsCard v-if="currentTab==='Deaths-Tab'"/>
-
         </Transition>
-
       </div>
-
-
     </div>
   </section>
 
@@ -116,19 +112,46 @@ export default {
       }
     },
 
-    SetBirthdayDate(){
-      this.birthdayInfoStore.setBirthdayInfo({
-        date : this.date.getDate(),
-        month : this.date.toLocaleString('default', { month: 'long' })
+    async SetBirthdayDate(){
+
+      await this.birthdayInfoStore.setBirthdayInfo({date: this.date.getDate(),month:this.date.toLocaleString('default', { month: 'long' })}).then(()=>{
+        $('.cards').each(function () {
+
+          var $this = $(this),
+              $cards = $this.find('.card'),
+              $current = $cards.filter('.card--current'),
+              $next;
+
+          console.log($this)
+          console.log($cards)
+          console.log($current)
+
+          $cards.on('click', function () {
+            console.log(this)
+            if (!$current.is(this)) {
+              $cards.removeClass('card--current card--out card--next');
+              $current.addClass('card--out');
+              $current = $(this).addClass('card--current');
+              $next = $current.next();
+              $next = $next.length ? $next : $cards.first();
+              $next.addClass('card--next');
+            }
+          });
+
+          if (!$current.length) {
+            $current = $cards.last();
+            $cards.first().trigger('click');
+          }
+
+          $this.addClass('cards--active');
+
+        })
       })
 
-      this.eventsUserInfoStore.setEvents({date: this.date.getDate(),month:this.date.toLocaleString('default', { month: 'long' })})
+
     },
 
-    // Test(){
-    //
-    //   this.eventsUserInfoStore.setEvents()
-    // },
+
 
     SwitchTabs(ev){
 
@@ -137,14 +160,7 @@ export default {
     }
   },
 
-  computed: {
 
-
-    ...mapState(useBirthdayInfoStore, {
-      // you can also write a function that gets access to the store
-      birthdayInfo: (store) => store.getBirthdayInfo,
-    }),
-  },
   created() {
     this.countDownTimer()
   }
@@ -153,22 +169,18 @@ export default {
 
 
 <style scoped>
-.bounce-enter-active {
-  animation: bounce-in 0.5s;
+.slide-fade-enter-active {
+  transition: all 0.3s ease-out;
 }
-.bounce-leave-active {
-  animation: bounce-in 0.5s reverse;
+
+.slide-fade-leave-active {
+  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
 }
-@keyframes bounce-in {
-  0% {
-    transform: scale(0);
-  }
-  50% {
-    transform: scale(1.25);
-  }
-  100% {
-    transform: scale(1);
-  }
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateX(20px);
+  opacity: 0;
 }
 </style>
 

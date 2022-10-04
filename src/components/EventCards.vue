@@ -1,18 +1,15 @@
 <template>
   <div>
     <ul class="cards">
-      <li v-for="i in 10" class="card">
+      <li v-for="(val,i) in GetEvents" class="card">
                     <span
                         class="bg-blue-400 text-white px-3 py-1 tracking-widest text-xs absolute left-0 top-0 rounded-bl">EVENTS</span>
-<!--        <span-->
-<!--            class="bg-blue-400 text-white px-3 py-1 tracking-widest text-xs absolute left-0 top-0 rounded-bl" id="next-card">NEXT CARD</span>-->
-        <h1>{{i}}</h1>
+        <!--        <span-->
+        <!--            class="bg-blue-400 text-white px-3 py-1 tracking-widest text-xs absolute left-0 top-0 rounded-bl" id="next-card">NEXT CARD</span>-->
+        <h1>{{ i }}</h1>
 
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent bibendum, lorem vel tincidunt
-          imperdiet,
-          nibh elit laoreet felis, a bibendum nisl tortor non orci. Donec pretium fermentum felis, quis
-          aliquet est
-          .</p>
+        <p style="max-height: 200px; overflow: auto; scrollbar-width:thin;">{{ val.event_description }}
+        </p>
       </li>
 
     </ul>
@@ -20,9 +17,16 @@
 </template>
 
 <script>
+import {useBirthdayInfoStore} from "@/stores/birthday-info.store";
+
 export default {
   name: "EventCards",
+  setup() {
+    const birthdayInfoStore = useBirthdayInfoStore()
 
+
+    return {birthdayInfoStore}
+  },
   data() {
     return {
       current: '',
@@ -32,39 +36,46 @@ export default {
   },
 
 
+  computed: {
+    GetEvents: function () {
+      return this.birthdayInfoStore.getBirthdayInfo.events
+    },
+
+  },
+
   mounted() {
-    $.fn.commentCards = function () {
 
-      return this.each(function () {
+    $('.cards').each(function () {
 
-        var $this = $(this),
-            $cards = $this.find('.card'),
-            $current = $cards.filter('.card--current'),
-            $next;
+      var $this = $(this),
+          $cards = $this.find('.card'),
+          $current = $cards.filter('.card--current'),
+          $next;
 
-        $cards.on('click', function () {
-          if (!$current.is(this)) {
-            $cards.removeClass('card--current card--out card--next');
-            $current.addClass('card--out');
-            $current = $(this).addClass('card--current');
-            $next = $current.next();
-            $next = $next.length ? $next : $cards.first();
-            $next.addClass('card--next');
-          }
-        });
+      console.log($this)
+      console.log($cards)
+      console.log($current)
 
-        if (!$current.length) {
-          $current = $cards.last();
-          $cards.first().trigger('click');
+      $cards.on('click', function () {
+        console.log(this)
+        if (!$current.is(this)) {
+          $cards.removeClass('card--current card--out card--next');
+          $current.addClass('card--out');
+          $current = $(this).addClass('card--current');
+          $next = $current.next();
+          $next = $next.length ? $next : $cards.first();
+          $next.addClass('card--next');
         }
+      });
 
-        $this.addClass('cards--active');
+      if (!$current.length) {
+        $current = $cards.last();
+        $cards.first().trigger('click');
+      }
 
-      })
+      $this.addClass('cards--active');
 
-    };
-
-    $('.cards').commentCards();
+    })
 
   }
 }
@@ -84,11 +95,11 @@ export default {
   top: 0;
   left: 0;
   z-index: 2;
-
-
+  height: 300px;
+  scrollbar-width: thin;
   border-radius: 30px;
   padding: 40px;
-  box-shadow: 0 0 40px rgba(0, 0, 0, 0.85);
+  box-shadow: 0 0 40px rgba(168, 154, 37, 0.14);
   transform: translateY(0) rotate(4deg) translateX(25px) scale(1);
   transform-origin: 0 0;
 
