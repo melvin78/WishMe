@@ -1,18 +1,19 @@
 <template>
   <div>
     <ul class="cards">
-      <li v-for="i in 10" class="card">
-                    <span
-                        class="bg-blue-400 text-white px-3 py-1 tracking-widest text-xs absolute left-0 top-0 rounded-bl">DEATHS</span>
-        <!--        <span-->
-        <!--            class="bg-blue-400 text-white px-3 py-1 tracking-widest text-xs absolute left-0 top-0 rounded-bl" id="next-card">NEXT CARD</span>-->
-        <h1>{{i}}</h1>
+      <li v-for="(val,i) in getBirths" class="card">
+        <span class="bg-red-400 text-white px-3 py-1 tracking-widest text-xs absolute left-0 top-0 rounded-bl">DEATHS</span>
+        <div><span class="text-blue-600">{{ val.celeb_birthyear }}</span> - {{ val.celeb_bio }}</div>
 
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent bibendum, lorem vel tincidunt
-          imperdiet,
-          nibh elit laoreet felis, a bibendum nisl tortor non orci. Donec pretium fermentum felis, quis
-          aliquet est
-          .</p>
+
+        <span class="inline-block h-1 w-10 rounded bg-indigo-500 ml-8 mt-1 mb-1"></span>
+
+
+        <p class="font-extralight" style="max-height: 130px; overflow: auto; scrollbar-width:thin;">
+          {{ val.celeb_description }}
+        </p>
+
+
       </li>
 
     </ul>
@@ -20,8 +21,23 @@
 </template>
 
 <script>
+import {useBirthdayInfoStore} from "@/stores/birthday-info.store";
+
 export default {
   name: "DeathsCard",
+  setup() {
+    const birthdayInfoStore = useBirthdayInfoStore()
+
+
+    return {birthdayInfoStore}
+  },
+
+  computed:{
+    getBirths: function () {
+      return this.birthdayInfoStore.getBirthdayInfo.celeb.filter(x=>x.type === "death")
+
+    }
+  },
 
   data() {
     return {
@@ -30,6 +46,7 @@ export default {
       next: null
     }
   },
+
 
 
   mounted() {
@@ -70,6 +87,7 @@ export default {
 }
 </script>
 
+
 <style scoped>
 .cards {
   position: relative;
@@ -84,11 +102,11 @@ export default {
   top: 0;
   left: 0;
   z-index: 2;
-
-
+  height: 300px;
+  scrollbar-width: thin;
   border-radius: 30px;
   padding: 40px;
-  box-shadow: 0 0 40px rgba(0, 0, 0, 0.85);
+  box-shadow: 0 0 40px rgba(168, 154, 37, 0.14);
   transform: translateY(0) rotate(4deg) translateX(25px) scale(1);
   transform-origin: 0 0;
 
@@ -138,7 +156,7 @@ export default {
   position: relative;
   z-index: 10;
   opacity: 1;
-  background: #ff8b8b;
+  background: #ffe789;
   transform: rotate(-1deg) translateX(0%) scale(1);
 }
 </style>

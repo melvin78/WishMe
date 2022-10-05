@@ -9,8 +9,8 @@
       </a>
 
       <nav class="md:ml-auto md:mr-auto flex flex-wrap items-center text-base justify-center">
-        <router-link class="mr-5 hover:text-gray-900 cursor-pointer" to="/">Home</router-link>
-        <router-link class="mr-5 hover:text-gray-900 cursor-pointer" to="/about">About</router-link>
+<!--        <router-link class="mr-5 hover:text-gray-900 cursor-pointer" to="/">Home</router-link>-->
+<!--        <router-link class="mr-5 hover:text-gray-900 cursor-pointer" to="/about">About</router-link>-->
         <a class="ml-3 text-gray-500" href="https://github.com/melvin78" target="_blank">
           <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                class="w-5 h-5" viewBox="0 0 24 24">
@@ -26,7 +26,6 @@
             <circle cx="4" cy="4" r="2" stroke="none"></circle>
           </svg>
         </a>
-        <!--        <a @click="$router.push('/currently-showing')" class="mr-5 hover:text-gray-900 cursor-pointer">Currently Showing</a>-->
 
       </nav>
 
