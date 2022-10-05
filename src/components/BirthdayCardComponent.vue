@@ -111,6 +111,7 @@ import DeathsCard from "./DeathsCard.vue";
 import {useBirthdayInfoStore} from "@/stores/birthday-info.store"
 import {useBreathingDaysStore} from "@/stores/breathing-days.store";
 
+
 export default {
   name: "BirthdayCardComponent",
   components: {DeathsCard, BirthCards, EventCards, Datepicker},
