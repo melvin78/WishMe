@@ -3,8 +3,9 @@
     <div class="container px-5  mx-auto flex flex-wrap flex-col">
       <div class="flex flex-col text-center w-full mb-10">
         <h1 class="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">Welcome :)</h1>
-        <p class="lg:w-2/3 mx-auto leading-relaxed text-base">Just need your first name and date of birth nothing much then click on
-        wish me. This project is completely open <a href="https://github.com/melvin78/WishMe" class="text-blue-600 hover:text-blue-700">source</a>  no information you write will be saved.</p>
+        <p class="lg:w-2/3 mx-auto leading-relaxed text-base">Just need your first name and date of birth nothing much
+          then click on
+          wish me.</p>
       </div>
       <div class="flex justify-center">
         <div class="flex w-full  justify-center items-end mb-5">
@@ -13,8 +14,10 @@
             <input type="text" id="hero-field" name="hero-field"
                    v-model="BirthdayName"
                    class="w-full bg-gray-100 rounded border bg-opacity-50 border-gray-300 focus:ring-2 focus:ring-indigo-200 focus:bg-transparent focus:border-indigo-500 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+            <span class="text-sm text-red-600" v-if="emptyBirthdayName"> Enter at least one name</span><br>
             <label for="hero-field" class="leading-7 text-sm text-gray-600">Date of Birth</label>
             <Datepicker :enableTimePicker="false" v-model="date"></Datepicker>
+            <span class="text-sm text-red-600" v-if="emptyBirthdayDate">Pick Date of Birth </span><br>
           </div>
           <button
               @click="SetBirthdayDate"
@@ -24,10 +27,10 @@
         </div>
       </div>
       <template v-if="ShowInfos">
-        <div  class="flex flex-col text-center w-full">
+        <div class="flex flex-col text-center w-full">
           <p class="lg:w-2/3 mx-auto leading-relaxed font-light text-2xl">CONGRATUALTIONS <span
               class="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">
-         {{BirthdayName}}
+         {{ BirthdayName }}
         </span><span>
         </span> on making <span
               class="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">{{
@@ -61,7 +64,7 @@
           Check below to see events,deaths and births of prominent people that occured on the day you were born.
         </span>
         </div>
-        <div   @click="SwitchTabs($event)" class="flex mx-auto flex-wrap mb-5">
+        <div @click="SwitchTabs($event)" class="flex mx-auto flex-wrap mb-5">
           <a id="Events-Tab"
              :class="[currentTab === 'Events-Tab'? 'sm:px-6 py-3 w-1/2 sm:w-auto justify-center sm:justify-start border-b-2 title-font font-medium' +
             'inline-flex items-center leading-none border-indigo-500 text-indigo-500 tracking-wider rounded-t cursor-pointer'
@@ -112,6 +115,7 @@ import {useBirthdayInfoStore} from "@/stores/birthday-info.store"
 import {useBreathingDaysStore} from "@/stores/breathing-days.store";
 
 
+
 export default {
   name: "BirthdayCardComponent",
   components: {DeathsCard, BirthCards, EventCards, Datepicker},
@@ -133,30 +137,43 @@ export default {
       seconds: 0,
       BirthdayName: "",
       ShowInfos: false,
+      emptyBirthdayName: false,
+      emptyBirthdayDate: false
     };
   },
+
+  watch:{
+    BirthdayName: function () {
+      this.emptyBirthdayName = false
+    },
+
+    date: function () {
+      this.emptyBirthdayDate = false
+    }
+  },
+
   methods: {
 
 
     secondCountDownTimer() {
 
-        setTimeout(() => {
-          this.seconds += 1
-          this.secondCountDownTimer()
-        }, 1000)
+      setTimeout(() => {
+        this.seconds += 1
+        this.secondCountDownTimer()
+      }, 1000)
 
     },
 
-    minuteCountDownTimer(){
+    minuteCountDownTimer() {
 
-        setTimeout(() => {
-          this.minutes += 1
-          this.minuteCountDownTimer()
-        }, 60000)
+      setTimeout(() => {
+        this.minutes += 1
+        this.minuteCountDownTimer()
+      }, 60000)
 
     },
 
-    hourCountDownTimer(){
+    hourCountDownTimer() {
 
       setTimeout(() => {
         this.minutes += 1
@@ -167,7 +184,7 @@ export default {
 
 
     async SetBirthdayDate() {
-      if (this.BirthdayName !== "" && this.date != null){
+      if (this.BirthdayName !== "" && this.date != null) {
         this.trips = Number(new Date().toLocaleDateString('default', {year: 'numeric'})) - Number(this.date.toLocaleString('default', {year: 'numeric',}))
         this.days = this.trips * 365
         this.hours = this.days * 24
@@ -223,11 +240,19 @@ export default {
         })
         this.ShowInfos = true
 
+      } else {
+        this.ShowInfos = false
+
       }
 
-      else {
-        this.ShowInfos= false
+      if (this.BirthdayName === ""){
+        this.emptyBirthdayName = true
       }
+
+      if (!this.date){
+        this.emptyBirthdayDate = true
+      }
+
 
 
     },
