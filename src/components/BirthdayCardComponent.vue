@@ -16,7 +16,7 @@
                    class="w-full bg-gray-100 rounded border bg-opacity-50 border-gray-300 focus:ring-2 focus:ring-indigo-200 focus:bg-transparent focus:border-indigo-500 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
             <span class="text-sm text-red-600" v-if="emptyBirthdayName"> Enter at least one name</span><br>
             <label for="hero-field" class="leading-7 text-sm text-gray-600">Date of Birth</label>
-            <Datepicker :enableTimePicker="false" v-model="date"></Datepicker>
+            <Datepicker autoApply teleportCenter  placeholder="Select Date Of Birth"  :enableTimePicker="false" v-model="date"></Datepicker>
             <span class="text-sm text-red-600" v-if="emptyBirthdayDate">Pick Date of Birth </span><br>
           </div>
           <button
