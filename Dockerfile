@@ -3,7 +3,7 @@ FROM node:lts-alpine
 WORKDIR /app
 COPY . ./
 RUN npm install
-RUN npm build
+RUN npm run build
 EXPOSE 4173
 
 
