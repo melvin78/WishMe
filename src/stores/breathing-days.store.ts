@@ -3,7 +3,6 @@ import type {BreathingDaysInterface} from "@/interfaces/breathing-days.interface
 
 export const useBreathingDaysStore = defineStore('breathingDays', {
     state: () => ({
-        /** @type {{ date: number, month: string} */
         breathingDays: {} as BreathingDaysInterface,
 
     }),

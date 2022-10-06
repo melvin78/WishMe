@@ -18,6 +18,8 @@
             <label for="hero-field" class="leading-7 text-sm text-gray-600">Date of Birth</label>
             <Datepicker autoApply teleportCenter  placeholder="Select Date Of Birth"  :enableTimePicker="false" v-model="date"></Datepicker>
             <span class="text-sm text-red-600" v-if="emptyBirthdayDate">Pick Date of Birth </span><br>
+            <span class="text-sm text-red-600" v-if="emptyYear">Pick a year before {{new Date().toLocaleString('default',{year:'numeric'})}}, unless you were born this year.</span><br>
+
           </div>
           <button
               @click="SetBirthdayDate"
@@ -140,6 +142,7 @@ export default {
       emptyBirthdayName: false,
       emptyBirthdayDate: false,
       countDownInitialized:false,
+      emptyYear:false
     };
   },
 
@@ -150,6 +153,7 @@ export default {
 
     date: function () {
       this.emptyBirthdayDate = false
+      this.emptyYear = false
     }
   },
 
@@ -186,7 +190,21 @@ export default {
 
     async SetBirthdayDate() {
 
-      if (this.BirthdayName !== "" && this.date != null) {
+
+      if (this.BirthdayName === ""){
+        this.emptyBirthdayName = true
+        this.ShowInfos = false
+      }
+      else if (!this.date){
+        this.emptyBirthdayDate = true
+        this.ShowInfos = false
+
+      }
+      else if(this.date && this.date.toLocaleString('default', {year: 'numeric'})>= new Date().toLocaleString('default',{year:'numeric'})){
+        this.emptyYear = true
+        this.ShowInfos = false
+      }
+      else{
         this.trips = Number(new Date().toLocaleDateString('default', {year: 'numeric'})) - Number(this.date.toLocaleString('default', {year: 'numeric',}))
         this.days = this.trips * 365
         this.hours = this.days * 24
@@ -248,17 +266,6 @@ export default {
         this.ShowInfos = true
         this.countDownInitialized = true
 
-      } else {
-        this.ShowInfos = false
-
-      }
-
-      if (this.BirthdayName === ""){
-        this.emptyBirthdayName = true
-      }
-
-      if (!this.date){
-        this.emptyBirthdayDate = true
       }
 
 
@@ -271,17 +278,8 @@ export default {
     }
   },
 
-  computed: {
-    getBreathingDays: function () {
-
-      return this.breathingDaysStore.getBreathingDays
-    }
-  },
 
 
-  created() {
-    // this.countDownTimer()
-  }
 }
 </script>
 
