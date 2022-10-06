@@ -138,7 +138,8 @@ export default {
       BirthdayName: "",
       ShowInfos: false,
       emptyBirthdayName: false,
-      emptyBirthdayDate: false
+      emptyBirthdayDate: false,
+      countDownInitialized:false,
     };
   },
 
@@ -184,6 +185,7 @@ export default {
 
 
     async SetBirthdayDate() {
+
       if (this.BirthdayName !== "" && this.date != null) {
         this.trips = Number(new Date().toLocaleDateString('default', {year: 'numeric'})) - Number(this.date.toLocaleString('default', {year: 'numeric',}))
         this.days = this.trips * 365
@@ -191,8 +193,13 @@ export default {
         this.minutes = this.hours * 60
         this.seconds = this.minutes * 60
         this.countDown = this.seconds
-        this.secondCountDownTimer()
-        this.minuteCountDownTimer()
+
+        if(!this.countDownInitialized){
+          this.secondCountDownTimer()
+          this.minuteCountDownTimer()
+          this.hourCountDownTimer()
+        }
+
 
         this.breathingDaysStore.setBreathingDays({
           name: this.BirthdayName,
@@ -239,6 +246,7 @@ export default {
           })
         })
         this.ShowInfos = true
+        this.countDownInitialized = true
 
       } else {
         this.ShowInfos = false
