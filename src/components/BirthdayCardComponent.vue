@@ -3,9 +3,7 @@
     <div class="container px-5  mx-auto flex flex-wrap flex-col">
       <div class="flex flex-col text-center w-full mb-10">
         <h1 class="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">Welcome :)</h1>
-        <p class="lg:w-2/3 mx-auto leading-relaxed text-base">Just need your first name and date of birth nothing much
-          then click on
-          wish me.</p>
+        <p class="lg:w-2/3 mx-auto leading-relaxed text-base">Just need your first name and date of birth then click on wish me.</p>
       </div>
       <div class="flex justify-center">
         <div class="flex w-full  justify-center items-end mb-5">
@@ -18,14 +16,14 @@
             <label for="hero-field" class="leading-7 text-sm text-gray-600">Date of Birth</label>
             <Datepicker autoApply teleportCenter  placeholder="Select Date Of Birth"  :enableTimePicker="false" v-model="date"></Datepicker>
             <span class="text-sm text-red-600" v-if="emptyBirthdayDate">Pick Date of Birth </span><br>
-            <span class="text-sm text-red-600" v-if="emptyYear">Pick a year before {{new Date().toLocaleString('default',{year:'numeric'})}}, unless you were born this year.</span><br>
-
+            <span class="text-sm text-red-600" v-if="emptyYear">Pick a year before {{new Date().toLocaleString('default',{year:'numeric'})}}</span><br>
+            <button
+                @click="SetBirthdayDate"
+                class="inline-flex text-white bg-amber-600 border-0 py-2 px-6 focus:outline-none hover:bg-amber-500 rounded text-lg">
+              Wish Me
+            </button>
           </div>
-          <button
-              @click="SetBirthdayDate"
-              class="inline-flex text-white bg-amber-600 border-0 py-2 px-6 focus:outline-none hover:bg-amber-500 rounded text-lg">
-            Wish Me
-          </button>
+
         </div>
       </div>
       <template v-if="ShowInfos">
@@ -38,12 +36,12 @@
               class="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">{{
               Number(trips).toLocaleString()
             }}</span>
-            trips around the sun. You have been breathing for the last
+            trips around the sun. You have been breathing for an estimate
             <span
                 class="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">{{
                 Number(days).toLocaleString()
               }} </span>
-            days,
+            days , that is equivalent to
             <span
                 class="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">{{
                 Number(hours).toLocaleString()
@@ -54,16 +52,16 @@
                 Number(minutes).toLocaleString()
               }}</span>
             minutes
-            and
+            or
             <span class="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">{{
                 Number(seconds).toLocaleString()
               }}</span>
-            seconds
-            and counting.
+            seconds.
+
           </p>
           <br/>
           <span class="mt-2">
-          Check below to see events,deaths and births of prominent people that occured on the day you were born.
+          Check below to see events,births and deaths of prominent figures that occurred on your birthday.
         </span>
         </div>
         <div @click="SwitchTabs($event)" class="flex mx-auto flex-wrap mb-5">
@@ -187,6 +185,12 @@ export default {
 
     },
 
+    validateDate(){
+      const currDateMonth = new Date().getMonth() + 1
+      const currDateDate = new Date().getDate()
+      return !(currDateDate >= this.date.getDate() && currDateMonth >= this.date.getMonth() + 1);
+    },
+
 
     async SetBirthdayDate() {
 
@@ -205,7 +209,10 @@ export default {
         this.ShowInfos = false
       }
       else{
-        this.trips = Number(new Date().toLocaleDateString('default', {year: 'numeric'})) - Number(this.date.toLocaleString('default', {year: 'numeric',}))
+
+        this.trips = this.validateDate()?
+            Number(new Date().toLocaleDateString('default', {year: 'numeric'})) - Number(this.date.toLocaleString('default', {year: 'numeric',})) -1:
+            Number(new Date().toLocaleDateString('default', {year: 'numeric'})) - Number(this.date.toLocaleString('default', {year: 'numeric',}))
         this.days = this.trips * 365
         this.hours = this.days * 24
         this.minutes = this.hours * 60
