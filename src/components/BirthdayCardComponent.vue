@@ -28,7 +28,7 @@
       </div>
       <template v-if="ShowInfos">
         <div class="flex flex-col text-center w-full">
-          <p class="lg:w-2/3 mx-auto leading-relaxed font-light text-2xl">CONGRATUALTIONS <span
+          <p class="lg:w-2/3 mx-auto leading-relaxed font-light text-2xl">CONGRATULATIONS <span
               class="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">
          {{ BirthdayName }}
         </span><span>
