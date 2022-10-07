@@ -3,7 +3,7 @@
     <ul class="cards">
       <li v-for="(val,i) in GetEvents" class="card">
         <span
-            class="bg-blue-400 text-white px-3 py-1 tracking-widest text-xs absolute left-0 top-0 rounded-bl">EVENTS</span>
+            class="bg-blue-400 text-white px-3 py-1 tracking-widest text-xs absolute left-0 top-0 rounded-bl">EVENT - {{i + 1}}</span>
         <div><span class="text-blue-600">{{ val.event_year }}</span> - {{ val.event_title }}</div>
 
 

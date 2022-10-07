@@ -2,7 +2,7 @@
   <div>
     <ul class="cards">
       <li v-for="(val,i) in getBirths" class="card">
-        <span class="bg-green-400 text-white px-3 py-1 tracking-widest text-xs absolute left-0 top-0 rounded-bl">BIRTHS</span>
+        <span class="bg-green-400 text-white px-3 py-1 tracking-widest text-xs absolute left-0 top-0 rounded-bl">BIRTH - {{i + 1}}</span>
         <div><span class="text-blue-600">{{ val.celeb_birthyear }}</span> - {{ val.celeb_bio }}</div>
 
 

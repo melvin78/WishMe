@@ -65,6 +65,7 @@
         </span>
         </div>
         <div @click="SwitchTabs($event)" class="flex mx-auto flex-wrap mb-5">
+
           <a id="Events-Tab"
              :class="[currentTab === 'Events-Tab'? 'sm:px-6 py-3 w-1/2 sm:w-auto justify-center sm:justify-start border-b-2 title-font font-medium' +
             'inline-flex items-center leading-none border-indigo-500 text-indigo-500 tracking-wider rounded-t cursor-pointer'
@@ -153,6 +154,23 @@ export default {
       this.emptyBirthdayDate = false
       this.emptyYear = false
     }
+  },
+
+  computed: {
+    GetEvents: function () {
+      return this.birthdayInfoStore.getBirthdayInfo.events
+    },
+
+    getDeaths: function () {
+      return this.birthdayInfoStore.getBirthdayInfo.celeb.filter(x=>x.type === "death")
+
+    },
+
+    getBirths: function () {
+      return this.birthdayInfoStore.getBirthdayInfo.celeb.filter(x=>x.type === "birth")
+
+    }
+
   },
 
   methods: {
